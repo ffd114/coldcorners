@@ -17,8 +17,8 @@ for usage
 To Do
 =====
 
-* Toggle function
-* Notifications
+* ~~Toggle function~~
+* ~~Notifications~~
 
 License
 =======
