@@ -14,6 +14,12 @@ Type
 
 for usage
 
+To Do
+=====
+
+* Toggle function
+* Notifications
+
 License
 =======
 
