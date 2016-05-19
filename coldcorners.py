@@ -2,7 +2,9 @@
 
 from argparse import ArgumentParser
 from configparser import ConfigParser
-from gi.repository import Gio
+import gi
+gi.require_version('Notify', '0.7')
+from gi.repository import Gio, Notify
 
 import os
 
@@ -109,12 +111,24 @@ class Config(object):
 
 class ColdCorners(object):
 
-    def __init__(self, config):
+    def __init__(self, config, notification=False):
 
         self.cfg = config
         self.core = plugin('core')
         self.expo = plugin('expo')
         self.scale = plugin('scale')
+        self.notif = notification
+
+        Notify.init('coldcorners')
+
+    def out(self, message):
+
+        if self.notif:
+            notif = Notify.Notification.new('ColdCorners', message, '')
+            notif.show()
+
+        else:
+            print(message)
 
     def enable(self):
 
@@ -132,14 +146,14 @@ class ColdCorners(object):
             self.scale.sync()
 
             self.cfg.saved = False
-            print('Enable success!')
+            self.out('Enable success!')
         else:
-            print('Cannot enable, hotcorners never been disabled before!')
+            self.out('Cannot enable, hotcorners never been disabled before!')
 
     def disable(self):
 
         if self.cfg.saved:
-            print('Cannot disable, hotcorners has been disabled before!')
+            self.out('Cannot disable, hotcorners has been disabled before!')
         else:
             self.cfg.show_desktop_edge = self.core.get_string(
                 'show-desktop-edge'
@@ -162,21 +176,32 @@ class ColdCorners(object):
 
             self.cfg.saved = True
 
-            print('Disable success!')
+            self.out('Disable success!')
+
+    def toggle(self):
+
+        if self.cfg.saved:
+            self.enable()
+        else:
+            self.disable()
 
 
 if __name__ == '__main__':
 
     parser = ArgumentParser()
-    parser.add_argument('command', help='enable/disable hotcorners',
-                        choices=['enable', 'disable'], nargs='?')
+    parser.add_argument('command', help='enable/disable/toggle hotcorners',
+                        choices=['enable', 'disable', 'toggle'], nargs='?')
+    parser.add_argument('-n', '--notification', help='show notification',
+                        action='store_true', required=False)
     args = parser.parse_args()
 
-    coldcorners = ColdCorners(Config())
+    coldcorners = ColdCorners(Config(), args.notification)
 
     if args.command == 'enable':
         coldcorners.enable()
     elif args.command == 'disable':
         coldcorners.disable()
+    elif args.command == 'toggle':
+        coldcorners.toggle()
     else:
         parser.print_help()
