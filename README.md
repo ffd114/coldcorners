@@ -1,7 +1,9 @@
 Introduction
 ===========
 
-Coldcorners is a script to enable/disable hotcorners
+Coldcorners is a script to enable/disable hotcorners for Unity
+
+Tested on Ubuntu 16.04 64-bit
 
 Usage
 =====
