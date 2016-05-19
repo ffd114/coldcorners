@@ -8,11 +8,17 @@ Tested on Ubuntu 16.04 64-bit
 Usage
 =====
 
-Type 
+```
+coldcorners [-h] [-n] [{enable,disable,toggle}]
 
-`./coldcorners.py -h` 
+positional arguments:
+  {enable,disable,toggle}
+                        enable/disable/toggle hotcorners
 
-for usage
+optional arguments:
+  -h, --help            show this help message and exit
+  -n, --notification    show notification
+```
 
 To Do
 =====
